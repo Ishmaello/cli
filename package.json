@@ -78,7 +78,7 @@
     "libnpmaccess": "^7.0.2",
     "libnpmdiff": "^5.0.11",
     "libnpmexec": "^5.0.11",
-    "libnpmfund": "^4.0.11",
+    "libnpmfund": "^4.0.17",
     "libnpmhook": "^9.0.3",
     "libnpmorg": "^5.0.3",
     "libnpmpack": "^5.0.11",
