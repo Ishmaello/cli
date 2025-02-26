@@ -1,4 +1,4 @@
-const util = require('util')
+const util = require('node:util')
 const Edge = require('../lib/edge.js')
 const OverrideSet = require('../lib/override-set.js')
 const t = require('tap')
@@ -57,6 +57,9 @@ const top = {
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
 }
 
 const a = {
@@ -81,6 +84,9 @@ const a = {
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
 }
 
 const b = {
@@ -103,6 +109,9 @@ const b = {
   },
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
+  },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
   },
 }
 
@@ -127,6 +136,9 @@ const bb = {
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
 }
 
 const aa = {
@@ -150,6 +162,9 @@ const aa = {
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
 }
 
 const c = {
@@ -172,6 +187,9 @@ const c = {
   },
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
+  },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
   },
 }
 
@@ -226,6 +244,16 @@ t.ok(new Edge({
   spec: '1.x',
   accept: '2.x',
 }).satisfiedBy(c), 'c@2 satisfies spec:1.x, accept:2.x')
+reset(a)
+
+t.equal(
+  (new Edge({
+    from: a,
+    type: 'prod',
+    name: 'c',
+    spec: '1.x',
+    accept: '2.x',
+  })).accept, '2.x', '.accept getter works')
 reset(a)
 
 t.ok(new Edge({
@@ -354,6 +382,9 @@ const referenceTop = {
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
   overrides: new OverrideSet({
     overrides: {
       referenceGrandchild: '$referenceChild',
@@ -393,6 +424,9 @@ const referenceChild = {
     this.overrides = edge.overrides
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
 }
 
 new Edge({
@@ -431,6 +465,9 @@ const referenceGrandchild = {
   addEdgeIn (edge) {
     this.overrides = edge.overrides
     this.edgesIn.add(edge)
+  },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
   },
 }
 
@@ -479,6 +516,9 @@ const badOverride = {
   },
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
+  },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
   },
   overrides: new OverrideSet({
     overrides: {
@@ -765,6 +805,9 @@ const bundleChild = {
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
   },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
+  },
 }
 
 const bundleParent = {
@@ -786,6 +829,9 @@ const bundleParent = {
   },
   addEdgeIn (edge) {
     this.edgesIn.add(edge)
+  },
+  deleteEdgeIn (edge) {
+    this.edgesIn.delete(edge)
   },
 }
 
@@ -848,6 +894,9 @@ t.test('override references find the correct root', (t) => {
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
     },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
+    },
   }
 
   const foo = {
@@ -874,6 +923,9 @@ t.test('override references find the correct root', (t) => {
     },
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
+    },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
     },
   }
   foo.overrides = overrides.getNodeRule(foo)
@@ -905,6 +957,9 @@ t.test('override references find the correct root', (t) => {
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
     },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
+    },
   }
   bar.overrides = foo.overrides.getNodeRule(bar)
 
@@ -935,6 +990,9 @@ t.test('override references find the correct root', (t) => {
     },
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
+    },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
     },
   }
   virtualBar.overrides = overrides
@@ -989,6 +1047,9 @@ t.test('shrinkwrapped and bundled deps are not overridden and remain valid', (t)
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
     },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
+    },
   }
 
   const foo = {
@@ -1019,6 +1080,9 @@ t.test('shrinkwrapped and bundled deps are not overridden and remain valid', (t)
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
     },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
+    },
   }
   foo.overrides = overrides.getNodeRule(foo)
 
@@ -1048,6 +1112,9 @@ t.test('shrinkwrapped and bundled deps are not overridden and remain valid', (t)
     addEdgeIn (edge) {
       this.edgesIn.add(edge)
     },
+    deleteEdgeIn (edge) {
+      this.edgesIn.delete(edge)
+    },
   }
   bar.overrides = foo.overrides.getNodeRule(bar)
 
@@ -1060,5 +1127,71 @@ t.test('shrinkwrapped and bundled deps are not overridden and remain valid', (t)
   })
 
   t.ok(edge.valid, 'edge is valid')
+  t.end()
+})
+
+t.test('overrideset comparison logic', (t) => {
+  const overrides1 = new OverrideSet({
+    overrides: {
+      bar: '^2.0.0',
+    },
+  })
+
+  const overrides2 = new OverrideSet({
+    overrides: {
+      bar: '^2.0.0',
+    },
+  })
+
+  const overrides3 = new OverrideSet({
+    overrides: {
+      foo: '^2.0.0',
+    },
+  })
+
+  const overrides4 = new OverrideSet({
+    overrides: {
+      foo: '^1.0.0',
+    },
+  })
+
+  const overrides5 = new OverrideSet({
+    overrides: {
+      bar: '^2.0.0',
+      foo: '^2.0.0',
+    },
+  })
+
+  const overrides6 = new OverrideSet({
+    overrides: {
+    },
+  })
+
+  const overrides7 = new OverrideSet({
+    overrides: {
+      bar: {
+        '.': '^2.0.0',
+        baz: '1.2.3',
+      },
+    },
+  })
+
+  t.ok(overrides1.isEqual(overrides1), 'overridesets are equal')
+  t.ok(overrides1.isEqual(overrides2), 'overridesets are equal')
+  t.ok(!overrides1.isEqual(overrides3), 'overridesets are different')
+  t.ok(!overrides1.isEqual(overrides5), 'overridesets are different')
+  t.ok(!overrides1.isEqual(overrides6), 'overridesets are different')
+  t.ok(!overrides1.isEqual(overrides7), 'overridesets are different')
+  t.ok(!overrides3.isEqual(overrides1), 'overridesets are different')
+  t.ok(!overrides3.isEqual(overrides4), 'overridesets are different')
+  t.ok(!overrides3.isEqual(overrides5), 'overridesets are different')
+  t.ok(!overrides4.isEqual(overrides5), 'overridesets are different')
+  t.ok(!overrides5.isEqual(overrides1), 'overridesets are different')
+  t.ok(!overrides5.isEqual(overrides3), 'overridesets are different')
+  t.ok(!overrides5.isEqual(overrides6), 'overridesets are different')
+  t.ok(!overrides6.isEqual(overrides1), 'overridesets are different')
+  t.ok(!overrides6.isEqual(overrides3), 'overridesets are different')
+  t.ok(overrides6.isEqual(overrides6), 'overridesets are equal')
+  t.ok(!overrides7.isEqual(overrides1), 'overridesets are different')
   t.end()
 })
